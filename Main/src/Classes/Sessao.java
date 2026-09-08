@@ -13,5 +13,8 @@ public class Sessao {
         return cadeiras;
     }
 
+    public String getFilme() {
+        return filme.getNome();
+    }
 
 }

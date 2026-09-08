@@ -32,5 +32,12 @@ public class Sala {
         return false;
     }
 
-
+    public void exibirSessoesDisponiveis() {
+        System.out.println("=== Sessões na Sala " + numero + " ===");
+        for (int i = 0; i < sessoes.length; i++) {
+            if (sessoes[i] != null) {
+                System.out.println("Horário [" + (i + 1) + "] -> " + sessoes[i].getFilme());
+            }
+        }
+    }
 }

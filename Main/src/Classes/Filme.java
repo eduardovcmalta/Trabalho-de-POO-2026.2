@@ -33,4 +33,11 @@ public class Filme {
     public void setValor(float valor){
         this.valor = valor;
     }
+
+    public Filme(String nome, String duracao, String sinopse, float valor){
+        this.nome = nome;
+        this.duracao = duracao;
+        this.sinopse = sinopse;
+        this.valor = valor;
+    }
 }
