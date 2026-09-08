@@ -1,6 +1,6 @@
 package Classes;
 
-public Bilhetes{
+public class Bilhetes{
     private Usuario getUser();
     private Usuario getCpf();
     private Sala getSala();

@@ -81,5 +81,19 @@ public class Usuario{
     public void setCompra(Compra compra){
         this.compra = compra;
     }
-    
+
+
+    public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, 
+        String nomecartao, int numerocartao, int codigovericartao, Compra compra){
+             this.user = user;
+             this.cpf = cpf;
+             this.senha = senha;
+             this.idade = idade;
+             this.sexo = sexo;
+             this.email = email;
+             this.nomecartao = nomecartao;
+             this.numerocartao = numerocartao;
+             this.codigovericartao = codigovericartao;
+             this.compra = compra;
+    }
 }
