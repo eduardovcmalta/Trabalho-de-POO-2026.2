@@ -9,10 +9,6 @@ public class Sessao {
         this.lugares = lugares;
     }
 
-    public Sessao(Filme filme) {
-        this.filme = filme;
-    }
-
     public Filme getFilme() {
         return filme;
     }
