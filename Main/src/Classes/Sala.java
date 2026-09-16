@@ -33,10 +33,30 @@ public class Sala {
     }
 
     public void exibirSessoesDisponiveis() {
-        System.out.println("=== Sessões na Sala " + numero + " ===");
+
+        boolean temSessao = false;
+
         for (int i = 0; i < sessoes.length; i++) {
             if (sessoes[i] != null) {
+                temSessao = true;
+                break;
+            }
+        }
+
+        if (!temSessao) {
+            System.out.println("Nenhuma sessão encontrada na sala " + numero);
+            return;
+        }
+
+        System.out.println("=== Sessões na Sala " + numero + " ===");
+
+
+        for (int i = 0; i < sessoes.length; i++) {
+
+            if (sessoes[i] != null) {
+
                 System.out.println("Horário [" + (i + 1) + "] -> " + sessoes[i].getFilme());
+
             }
         }
     }
