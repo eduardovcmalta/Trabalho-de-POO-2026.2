@@ -81,6 +81,7 @@ public class Usuario{
     public void setCompra(Compra compra){
         this.compra = compra;
     }
+<<<<<<< HEAD:Classes/Usuario.java
 
 
     public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, 
@@ -96,4 +97,19 @@ public class Usuario{
              this.codigovericartao = codigovericartao;
              this.compra = compra;
     }
+=======
+    public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, 
+        String nomecartao, int numerocartao, int codigovericartao, Compra compra){
+            this.user = user;
+            this.cpf = cpf;
+            this.senha = senha;
+            this.idade = idade;
+            this.sexo = sexo;
+            this.email = email;
+            this.nomecartao = nomecartao;
+            this.numerocartao = numerocartao;
+            this.codigovericartao = codigovericartao;
+            this.compra = compra;
+        }
+>>>>>>> 8b270f1f76db2fc580416ce1e2ae6d9e90273eef:Main/src/Classes/Usuario.java
 }
