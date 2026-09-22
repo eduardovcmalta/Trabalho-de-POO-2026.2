@@ -1,16 +1,16 @@
 package Classes;
 
 public class Bilhete {
-    private Usuario usuario;
+    private String user;
     private String cpf;
     private Sala sala;
     private Sessao sessao;
     private Filme filme;
-    private float valor;
+    private double valor;
     private String cadeira;
 
-    public Bilhete(Usuario usuario, String cpf, Sala sala, Sessao sessao, Filme filme, float valor, String cadeira) {
-        this.usuario = usuario;
+    public Bilhete(String user, String cpf, Sala sala, Sessao sessao, Filme filme, double valor, String cadeira) {
+        this.user = user;
         this.cpf = cpf;
         this.sala = sala;
         this.sessao = sessao;
@@ -19,11 +19,12 @@ public class Bilhete {
         this.cadeira = cadeira;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getUser() {
+        return user;
     }
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getCpf() {
@@ -54,10 +55,10 @@ public class Bilhete {
         this.filme = filme;
     }
 
-    public float getValor() {
+    public double getValor() {
         return valor;
     }
-    public void setValor(float valor) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
 

@@ -2,7 +2,7 @@ package Classes;
 
 public class Filme {
     private String nome;
-    private String duracao;
+    private int duracao;
     private String sinopse;
     private float valor;
 
@@ -13,10 +13,10 @@ public class Filme {
         this.nome = nome;
     }
 
-    public String getDuracao(){
+    public int getDuracao(){
         return duracao;
     }
-    public void setDuracao(String duracao){
+    public void setDuracao(int duracao){
         this.duracao = duracao;
     }
 
@@ -34,7 +34,7 @@ public class Filme {
         this.valor = valor;
     }
 
-    public Filme(String nome, String duracao, String sinopse, float valor){
+    public Filme(String nome, int duracao, String sinopse, float valor){
         this.nome = nome;
         this.duracao = duracao;
         this.sinopse = sinopse;

@@ -40,11 +40,17 @@ public class Sala {
         return false;
     }
 
+    private String obterHorario(int indice) {
+        int inicio = 8 + (indice * 2);
+        int fim = inicio + 2;
+        return String.format("%02d:00 - %02d:00", inicio, fim);
+    }
+
     public void exibirSessoesDisponiveis() {
         System.out.println("=== Sessões na Sala " + numero + " (" + tipo.getTipo() + ") ===");
         for (int i = 0; i < sessoes.length; i++) {
             if (sessoes[i] != null) {
-                System.out.println("Horário [" + (i + 1) + "] -> " + sessoes[i].getFilme());
+                System.out.println(obterHorario(i) + " -> " + sessoes[i].getFilme());
             }
         }
     }

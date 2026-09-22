@@ -1,46 +1,88 @@
 package Classes;
 
+import java.util.ArrayList;
+import java.util.List;
+import Enums.Cupons;
+import Enums.Produtos;
+
 public class Compra {
     private Usuario usuario;
-    private Bilhete bilhetes[];
-    private String itens[];
-    private int qtdBilhetes;
-    private int qtdItens;
+    private List<Bilhete> bilhetes = new ArrayList<>();
+    private List<Produtos> produtos = new ArrayList<>();
 
-    public Compra(Usuario usuario, int maxBilhetes, int maxItens) {
+    public Compra(Usuario usuario) {
         this.usuario = usuario;
-        this.bilhetes = new Bilhete[maxBilhetes];
-        this.itens = new String[maxItens];
-        this.qtdBilhetes = 0;
-        this.qtdItens = 0;
     }
 
     public Usuario getUsuario() {
         return usuario;
     }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public Bilhete[] getBilhetes() {
+    public List<Bilhete> getBilhetes() {
         return bilhetes;
     }
 
-    public String[] getItens() {
-        return itens;
+
+    public List<Produtos> getProdutos() {
+        return produtos;
     }
 
-    public void adicionarBilhete(Bilhete bilhete) {
-        if (qtdBilhetes < bilhetes.length) {
-            bilhetes[qtdBilhetes] = bilhete;
-            qtdBilhetes++;
+    public int getQtdBilhetes() {
+        return bilhetes.size();
+    }
+
+    public int getQtdProdutos() {
+        return produtos.size();
+    }
+
+    // Comprar SEM cupom
+    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira) {
+        return comprarBilhete(sala, sessao, cadeira, null);
+    }
+
+    // Comprar COM cupom
+    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, Cupons cupom) {
+        if (!sessao.reservarCadeira(cadeira)) {
+            System.out.println("Cadeira " + cadeira + " indisponível!");
+            return null;
+        }
+
+        Filme filme = sessao.getFilme();
+        double valor = usuario.calcularValorBilhete(sala, filme);
+
+        if (cupom != null) {
+            valor = cupom.aplicarDesconto(valor);
+        }
+
+        Bilhete bilhete = new Bilhete(usuario.getUser(), usuario.getCpf(), sala, sessao, filme, valor, cadeira);
+        bilhetes.add(bilhete);
+
+        return bilhete;
+    }
+
+    public void adicionarProduto(Produtos produto) {
+        if (produto != null) {
+            this.produtos.add(produto);
+            System.out.println(produto.getNome() + " adicionado à compra!");
         }
     }
 
-    public void adicionarItem(String item) {
-        if (qtdItens < itens.length) {
-            itens[qtdItens] = item;
-            qtdItens++;
+
+    public double calcularValorTotal() {
+        double total = 0.0;
+
+        for (Bilhete b : bilhetes) {
+            total += b.getValor();
         }
+
+        for (Produtos p : produtos) {
+            total += p.getValor();
+        }
+
+        return total;
     }
 }

@@ -94,4 +94,10 @@ public class Usuario{
             this.codigovericartao = codigovericartao;
             this.compra = compra;
         }
+
+    public double calcularValorBilhete(Sala sala, Filme filme) {
+        double valorFinal = sala.getTipo().calcularValor(filme.getValor());
+
+        return valorFinal;
+    }
 }
