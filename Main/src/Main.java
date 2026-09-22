@@ -1,9 +1,10 @@
 import Classes.*;
+import Enums.TipoSala;
 
 public class Main {
 
     public static void main (String[] args) {
-        Sala sala1 = new Sala(1);
+        Sala sala1 = new Sala(1, TipoSala.COMUM);
 
         // 2. Cria os filmes
         Filme filme1 = new Filme("Interstelar", "120", "Filme de um cara no espaço", 20);

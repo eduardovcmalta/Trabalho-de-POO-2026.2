@@ -2,7 +2,7 @@ package Enums;
 
 public enum Cupons {
 
-        MEIAENTRADA(50.0),
+        BEMVINDO10(10.0),
         QUARTAPROMOCIONAL(30.0),
         PRIORITARIO(20.0);
 
