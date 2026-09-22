@@ -46,6 +46,15 @@ public class Sala {
         return String.format("%02d:00 - %02d:00", inicio, fim);
     }
 
+    public String getHorarioSessao(Sessao sessao) {
+        for (int i = 0; i < sessoes.length; i++) {
+            if (sessoes[i] == sessao) {
+                return obterHorario(i);
+            }
+        }
+        return "Horário não definido";
+    }
+
     public void exibirSessoesDisponiveis() {
         System.out.println("=== Sessões na Sala " + numero + " (" + tipo.getTipo() + ") ===");
         for (int i = 0; i < sessoes.length; i++) {

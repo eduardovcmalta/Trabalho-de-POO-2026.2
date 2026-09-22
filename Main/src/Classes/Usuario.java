@@ -82,7 +82,7 @@ public class Usuario{
         this.compra = compra;
     }
     public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, 
-        String nomecartao, int numerocartao, int codigovericartao, Compra compra){
+        String nomecartao, int numerocartao, int codigovericartao){
             this.user = user;
             this.cpf = cpf;
             this.senha = senha;
@@ -92,7 +92,6 @@ public class Usuario{
             this.nomecartao = nomecartao;
             this.numerocartao = numerocartao;
             this.codigovericartao = codigovericartao;
-            this.compra = compra;
         }
 
     public double calcularValorBilhete(Sala sala, Filme filme) {

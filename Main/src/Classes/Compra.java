@@ -26,7 +26,6 @@ public class Compra {
         return bilhetes;
     }
 
-
     public List<Produtos> getProdutos() {
         return produtos;
     }
@@ -58,19 +57,22 @@ public class Compra {
             valor = cupom.aplicarDesconto(valor);
         }
 
-        Bilhete bilhete = new Bilhete(usuario.getUser(), usuario.getCpf(), sala, sessao, filme, valor, cadeira);
+        // Obtém a faixa de horário da sessão a partir da sala
+        String horario = sala.getHorarioSessao(sessao);
+
+        // Cria o bilhete passando o objeto usuario, (float) valor e o horario
+        Bilhete bilhete = new Bilhete(usuario, usuario.getCpf(), sala, sessao, filme, (float) valor, cadeira, horario);
         bilhetes.add(bilhete);
 
         return bilhete;
     }
 
-    public void adicionarProduto(Produtos produto) {
+    public void comprarProduto(Produtos produto) {
         if (produto != null) {
             this.produtos.add(produto);
             System.out.println(produto.getNome() + " adicionado à compra!");
         }
     }
-
 
     public double calcularValorTotal() {
         double total = 0.0;
@@ -84,5 +86,49 @@ public class Compra {
         }
 
         return total;
+    }
+
+    public void exibirResumoCompra() {
+        System.out.println("==========================================================================");
+        System.out.println("                             RESUMO DA COMPRA                             ");
+        System.out.println("==========================================================================");
+
+        if (usuario != null) {
+            System.out.println("Cliente: " + usuario.getUser() + " (CPF: " + usuario.getCpf() + ")");
+        }
+
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("INGRESSOS (" + bilhetes.size() + "):");
+        if (bilhetes.isEmpty()) {
+            System.out.println("  Nenhum ingresso selecionado.");
+        } else {
+            for (int i = 0; i < bilhetes.size(); i++) {
+                Bilhete b = bilhetes.get(i);
+                System.out.printf("  %d. Filme: %-15s | Assento: %-4s | Horário: %-15s | Valor: R$ %.2f%n",
+                        (i + 1),
+                        b.getFilme().getNome(),
+                        b.getCadeira(),
+                        b.getHorario(),
+                        b.getValor());
+            }
+        }
+
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("BOMBONIERE (" + produtos.size() + "):");
+        if (produtos.isEmpty()) {
+            System.out.println("  Nenhum item da bomboniere selecionado.");
+        } else {
+            for (int i = 0; i < produtos.size(); i++) {
+                Produtos p = produtos.get(i);
+                System.out.printf("  %d. %-20s | Valor: R$ %.2f%n",
+                        (i + 1),
+                        p.getNome(),
+                        p.getValor());
+            }
+        }
+
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("TOTAL A PAGAR: R$ %.2f%n", calcularValorTotal());
+        System.out.println("==========================================================================\n");
     }
 }
