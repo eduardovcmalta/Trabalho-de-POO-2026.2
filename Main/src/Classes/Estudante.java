@@ -10,7 +10,6 @@ public class Estudante extends Usuario{
 
     @Override
     public double calcularValorBilhete(Sala sala, Filme filme) {
-        double valorCheio = super.calcularValorBilhete(sala, filme);
-        return valorCheio / 2;
+        return super.calcularValorBilhete(sala, filme) / 2;
     }
 }

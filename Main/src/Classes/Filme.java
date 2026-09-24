@@ -5,6 +5,8 @@ public class Filme {
     private int duracao;
     private String sinopse;
     private float valor;
+    private float nota;
+    private int quantidade_criticos;
 
     public String getNome(){
         return nome;
