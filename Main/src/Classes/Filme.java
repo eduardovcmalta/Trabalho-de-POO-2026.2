@@ -7,6 +7,7 @@ public class Filme {
     private float valor;
     private float nota;
     private int quantidade_criticos;
+    private Critica[] critica = new Critica[100];
 
     public String getNome(){
         return nome;
@@ -35,6 +36,15 @@ public class Filme {
     public void setValor(float valor){
         this.valor = valor;
     }
+
+    public float getNota(){ return nota; }
+    public void setNota(float nota){ this.nota = nota;}
+
+    public int getQuantidade_criticos(){ return quantidade_criticos; }
+    public void setQuantidade_criticos(int quantidade_criticos){ this.quantidade_criticos = quantidade_criticos;}
+
+    public Critica[] getCritica() { return critica; }
+    public void setCritica(Critica[] critica) { this.critica = critica; }
 
     public Filme(String nome, int duracao, String sinopse, float valor){
         this.nome = nome;
