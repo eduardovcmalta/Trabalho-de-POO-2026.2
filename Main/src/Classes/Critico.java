@@ -5,7 +5,7 @@ public class Critico extends Usuario{
     String origem;
 
     public Critico(String user, String cpf, String senha, int idade, String sexo, String email,
-                   String nomecartao, int numerocartao, int codigovericartao, String origem) {
+                   String nomecartao, String numerocartao, int codigovericartao, String origem) {
 
         super(user, cpf, senha, idade, sexo, email, nomecartao, numerocartao, codigovericartao);
         this.origem = origem;

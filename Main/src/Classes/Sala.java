@@ -59,7 +59,7 @@ public class Sala {
         System.out.println("=== Sessões na Sala " + numero + " (" + tipo.getTipo() + ") ===");
         for (int i = 0; i < sessoes.length; i++) {
             if (sessoes[i] != null) {
-                System.out.println(obterHorario(i) + " -> " + sessoes[i].getFilme());
+                System.out.println(obterHorario(i) + " -> " + sessoes[i].getFilme().getNome());            
             }
         }
     }

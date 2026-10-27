@@ -3,7 +3,7 @@ package Classes;
 public class Estudante extends Usuario{
 
     public Estudante(String user, String cpf, String senha, int idade, String sexo, String email,
-                   String nomecartao, int numerocartao, int codigovericartao){
+                   String nomecartao, String numerocartao, int codigovericartao){
 
         super(user, cpf, senha, idade, sexo, email, nomecartao, numerocartao, codigovericartao);
     }

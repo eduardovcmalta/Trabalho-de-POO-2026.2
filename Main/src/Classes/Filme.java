@@ -5,7 +5,7 @@ public class Filme {
     private int duracao;
     private String sinopse;
     private float valor;
-    private float nota;
+    private double nota;
     private int quantidade_criticos;
     private Critica[] critica = new Critica[100];
 
@@ -37,7 +37,7 @@ public class Filme {
         this.valor = valor;
     }
 
-    public float getNota(){ return nota; }
+    public double getNota(){ return nota; }
     public void setNota(float nota){ this.nota = nota;}
 
     public int getQuantidade_criticos(){ return quantidade_criticos; }

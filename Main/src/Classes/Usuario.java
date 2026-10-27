@@ -8,7 +8,7 @@ public class Usuario{
     private String sexo;
     private String email;
     private String nomecartao;
-    private int numerocartao;
+    private String numerocartao;
     private int codigovericartao;
     private Compra compra;
 
@@ -61,10 +61,10 @@ public class Usuario{
         this.nomecartao = nomecartao;
     }
 
-    public int getNumeroCartao(){
+    public String getNumeroCartao(){
         return numerocartao;
     }
-    public void setNumeroCartao(int numerocartao){
+    public void setNumeroCartao(String numerocartao){
         this.numerocartao = numerocartao;
     }
 
@@ -82,7 +82,7 @@ public class Usuario{
         this.compra = compra;
     }
     public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, 
-        String nomecartao, int numerocartao, int codigovericartao){
+        String nomecartao, String numerocartao, int codigovericartao){
             this.user = user;
             this.cpf = cpf;
             this.senha = senha;
