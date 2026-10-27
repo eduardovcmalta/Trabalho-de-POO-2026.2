@@ -1,6 +1,6 @@
 package Enums;
 
-public enum Cupons {
+public enum CupomPromocional {
 
         BEMVINDO10(10.0),
         QUARTAPROMOCIONAL(30.0),
@@ -8,7 +8,7 @@ public enum Cupons {
 
         private final double desconto;
 
-        Cupons(double desconto) {
+        CupomPromocional(double desconto) {
             this.desconto = desconto;
         }
 
