@@ -38,7 +38,7 @@ public class Filme {
     }
 
     public double getNota(){ return nota; }
-    public void setNota(float nota){ this.nota = nota;}
+    public void setNota(double nota){ this.nota = nota;}
 
     public int getQuantidade_criticos(){ return quantidade_criticos; }
     public void setQuantidade_criticos(int quantidade_criticos){ this.quantidade_criticos = quantidade_criticos;}
