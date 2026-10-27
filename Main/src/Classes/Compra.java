@@ -2,13 +2,22 @@ package Classes;
 
 import java.util.ArrayList;
 import java.util.List;
-import Enums.Cupons;
+import Enums.CupomPromocional;
 import Enums.Produtos;
 
 public class Compra {
     private Usuario usuario;
     private List<Bilhete> bilhetes = new ArrayList<>();
     private List<Produtos> produtos = new ArrayList<>();
+    private List<Double> valoresProdutos = new ArrayList<>();
+
+    public List<Double> getValoresProdutos() {
+        return valoresProdutos;
+    }
+
+    public void setValoresProdutos(List<Double> valoresProdutos) {
+        this.valoresProdutos = valoresProdutos;
+    }
 
     public Compra(Usuario usuario) {
         this.usuario = usuario;
@@ -44,7 +53,7 @@ public class Compra {
     }
 
     // Comprar COM cupom
-    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, Cupons cupom) {
+    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, CupomPromocional cupom) {
         if (!sessao.reservarCadeira(cadeira)) {
             System.out.println("Cadeira " + cadeira + " indisponível!");
             return null;
@@ -68,11 +77,21 @@ public class Compra {
     }
 
     public void comprarProduto(Produtos produto) {
-        if (produto != null) {
-            this.produtos.add(produto);
-            System.out.println(produto.getNome() + " adicionado à compra!");
-        }
+    comprarProduto(produto, null);
+}
+
+public void comprarProduto(Produtos produto, CupomPromocional cupom) {
+    if (produto == null) return;
+
+    double valor = produto.getValor();
+    if (cupom != null) {
+        valor = cupom.aplicarDesconto(valor);
     }
+
+    produtos.add(produto);
+    valoresProdutos.add(valor);
+    System.out.println(produto.getNome() + " adicionado à compra!");
+}
 
     public double calcularValorTotal() {
         double total = 0.0;
@@ -81,8 +100,8 @@ public class Compra {
             total += b.getValor();
         }
 
-        for (Produtos p : produtos) {
-            total += p.getValor();
+        for (double v : valoresProdutos) {
+            total += v;
         }
 
         return total;
@@ -123,7 +142,7 @@ public class Compra {
                 System.out.printf("  %d. %-20s | Valor: R$ %.2f%n",
                         (i + 1),
                         p.getNome(),
-                        p.getValor());
+                        valoresProdutos.get(i));
             }
         }
 
