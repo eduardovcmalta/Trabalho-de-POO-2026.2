@@ -1,6 +1,7 @@
 import Classes.*;
 import Enums.Produtos;
 import Enums.TipoSala;
+import Enums.CupomPromocional;
 
 public class Main {
 
@@ -28,6 +29,20 @@ public class Main {
         compraFatima.comprarBilhete(sala1, sessao1, "A4");
         compraFatima.exibirResumoCompra();
 
+
+        compraJoao.comprarProduto(Produtos.PIPOCA, CupomPromocional.BEMVINDO10);
+        compraJoao.exibirResumoCompra();
+
+        Critico ana = new Critico("ana", "33344455566", "123", 30, "F", "ana@gmail.com",
+                "ana cartao", "1234567890123456", 123, "Folha de Pernambuco");
+        ana.atribuirNota(9.0, filme1);
+        ana.atribuirNota(7.0, filme1);
+        ana.atribuirCritica("Ótimo filme", filme1);
+        System.out.println("Nota do filme: " + filme1.getNota() + " (" + filme1.getQuantidade_criticos() + " críticos)");
+            
+        Compra compraAna = new Compra(ana);
+        compraAna.comprarBilhete(sala1, sessao1, "B1");
+        compraAna.exibirResumoCompra();
 
     }
 }
