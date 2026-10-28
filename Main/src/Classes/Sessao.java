@@ -3,7 +3,7 @@ package Classes;
 public class Sessao {
     private Filme filme;
     private boolean[][] cadeiras;
-    public boolean horarioPassado = false;
+    private boolean horarioPassado = false;
 
     public Filme getFilme(){
         return filme;
