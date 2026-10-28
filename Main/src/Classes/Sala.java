@@ -30,7 +30,12 @@ public class Sala {
     public void setSessoes(Sessao sessoes[]) {
         this.sessoes = sessoes;
     }
-
+    public int getNumero(){
+        return numero;
+    }
+    public void setNumero(int numero){
+        this.numero = numero;
+    }
     // Funções
     public boolean agendarSessao(int horario, Sessao sessao) {
         if (horario >= 0 && horario < sessoes.length) {

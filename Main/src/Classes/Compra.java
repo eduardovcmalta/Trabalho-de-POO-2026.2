@@ -46,6 +46,13 @@ public class Compra {
     public int getQtdProdutos() {
         return produtos.size();
     }
+    public void setBilhetes(List<Bilhete> bilhetes) {
+        this.bilhetes = bilhetes;
+    }
+
+    public void setProdutos(List<Produtos> produtos) {
+        this.produtos = produtos;
+    }
 
     // Comprar SEM cupom
     public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira) {
@@ -105,6 +112,30 @@ public void comprarProduto(Produtos produto, CupomPromocional cupom) {
         }
 
         return total;
+    }
+
+    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade) {
+        comprarVariosBilhetes(sala, sessao, quantidade, null);
+    }
+
+    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade, CupomPromocional cupom) {
+        // Busca a sugestão de cadeiras juntas na sessão
+        java.util.List<String> cadeirasSugeridas = sessao.sugerirCadeiras(quantidade);
+
+        if (cadeirasSugeridas == null) {
+            System.out.println("Não há " + quantidade + " cadeiras juntas disponíveis nesta sessão.");
+            return;
+        }
+
+        System.out.println("Sugestão de cadeiras juntas encontradas: " + cadeirasSugeridas);
+        System.out.println("Efetuando a compra...");
+
+        // Reutiliza o método individual para comprar cada cadeira da sugestão
+        for (String cadeira : cadeirasSugeridas) {
+            comprarBilhete(sala, sessao, cadeira, cupom);
+        }
+        
+        System.out.println(quantidade + " bilhetes comprados com sucesso!");
     }
 
     public void exibirResumoCompra() {

@@ -99,4 +99,28 @@ public class Usuario{
 
         return valorFinal;
     }
+    
+    public void realizarCompra(Compra novaCompra) {
+        this.compra = novaCompra;
+        System.out.println("Compra realizada com sucesso para o usuário: " + this.user);
+    }
+
+    public void cancelarCompra() {
+        if (this.compra != null) {
+            // Percorre os bilhetes da compra e libera as cadeiras na respectiva sessão
+            for (Bilhete b : this.compra.getBilhetes()) {
+                b.getSessao().cancelarReserva(b.getCadeira());
+            }
+            this.compra = null;
+            System.out.println("Compra cancelada. As poltronas foram liberadas.");
+        } else {
+            System.out.println("Nenhuma compra ativa para cancelar.");
+        }
+    }
+
+    public void alterarCompra(Compra compraAtualizada) {
+        System.out.println("Alterando compra atual...");
+        this.cancelarCompra(); // Cancela a anterior e libera os assentos
+        this.realizarCompra(compraAtualizada); // Atribui a nova compra
+    }
 }

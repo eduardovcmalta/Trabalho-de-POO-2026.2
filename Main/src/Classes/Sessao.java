@@ -4,6 +4,50 @@ public class Sessao {
     private Filme filme;
     private boolean[][] cadeiras;
 
+    public void setFilme(Filme filme) {
+        this.filme = filme;
+    }
+
+    public void setCadeiras(boolean[][] cadeiras) {
+        this.cadeiras = cadeiras;
+    }
+
+    public void cancelarReserva(String cadeira) {
+        int[] coordenadas = converterCadeira(cadeira);
+        if (coordenadas != null) {
+            int linha = coordenadas[0];
+            int coluna = coordenadas[1];
+            if (linha >= 0 && linha < cadeiras.length && coluna >= 0 && coluna < cadeiras[0].length) {
+                cadeiras[linha][coluna] = false; // Libera o assento
+            }
+        }
+    }
+
+    public java.util.List<String> sugerirCadeiras(int qtdBilhetes) {
+        java.util.List<String> sugestao = new java.util.ArrayList<>();
+        
+        for (int linha = 0; linha < cadeiras.length; linha++) {
+            int consecutivas = 0;
+            sugestao.clear();
+            
+            for (int coluna = 0; coluna < cadeiras[linha].length; coluna++) {
+                if (!cadeiras[linha][coluna]) { // Se estiver livre
+                    consecutivas++;
+                    char letra = (char) ('A' + linha);
+                    sugestao.add(letra + String.valueOf(coluna + 1));
+                    
+                    if (consecutivas == qtdBilhetes) {
+                        return sugestao; // Retorna a lista quando achar as cadeiras juntas
+                    }
+                } else {
+                    consecutivas = 0; // Zera a contagem se achar uma ocupada
+                    sugestao.clear();
+                }
+            }
+        }
+        return null; // Retorna null se não houver assentos juntos suficientes
+    }
+
     public Sessao(Filme filme) {
         this.cadeiras = new boolean[10][15];
         this.filme = filme;
