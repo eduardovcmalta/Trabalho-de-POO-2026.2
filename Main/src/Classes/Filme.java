@@ -8,6 +8,7 @@ public class Filme {
     private double nota;
     private int quantidade_criticos;
     private Critica[] critica = new Critica[100];
+    private boolean emCartaz = true;
 
     public String getNome(){
         return nome;
@@ -45,6 +46,13 @@ public class Filme {
 
     public Critica[] getCritica() { return critica; }
     public void setCritica(Critica[] critica) { this.critica = critica; }
+
+    public boolean isEmCartaz(){
+        return emCartaz;
+    }
+    public void setEmCartaz(boolean emCartaz){
+        this.emCartaz = emCartaz;
+    }
 
     public Filme(String nome, int duracao, String sinopse, float valor){
         this.nome = nome;

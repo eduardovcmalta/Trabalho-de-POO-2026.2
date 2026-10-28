@@ -46,6 +46,7 @@ public class Compra {
     public int getQtdProdutos() {
         return produtos.size();
     }
+    
     public void setBilhetes(List<Bilhete> bilhetes) {
         this.bilhetes = bilhetes;
     }
@@ -54,51 +55,87 @@ public class Compra {
         this.produtos = produtos;
     }
 
+    // --- COMPRA DE BILHETES ---
+
     // Comprar SEM cupom
-    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira) {
+    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira) throws VendasException {
         return comprarBilhete(sala, sessao, cadeira, null);
     }
 
     // Comprar COM cupom
-    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, CupomPromocional cupom) {
-        if (!sessao.reservarCadeira(cadeira)) {
-            System.out.println("Cadeira " + cadeira + " indisponível!");
-            return null;
+    public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, CupomPromocional cupom) throws VendasException {
+        Filme filme = sessao.getFilme();
+
+        // 1. Verifica se o filme está em cartaz
+        if (!filme.isEmCartaz()) {
+            throw new VendasException("ERRO: O filme '" + filme.getNome() + "' não está mais em cartaz!");
         }
 
-        Filme filme = sessao.getFilme();
+        // 2. Verifica se o horário da sessão já passou
+        if (sessao.isHorarioPassado()) {
+            throw new VendasException("ERRO: O horário desta sessão já passou!");
+        }
+
+        // 3. Tenta reservar a cadeira (vai disparar VendasException se estiver ocupada)
+        sessao.reservarCadeira(cadeira);
+
         double valor = usuario.calcularValorBilhete(sala, filme);
 
         if (cupom != null) {
             valor = cupom.aplicarDesconto(valor);
         }
 
-        // Obtém a faixa de horário da sessão a partir da sala
         String horario = sala.getHorarioSessao(sessao);
-
-        // Cria o bilhete passando o objeto usuario, (float) valor e o horario
         Bilhete bilhete = new Bilhete(usuario, usuario.getCpf(), sala, sessao, filme, (float) valor, cadeira, horario);
         bilhetes.add(bilhete);
 
         return bilhete;
     }
 
-    public void comprarProduto(Produtos produto) {
-    comprarProduto(produto, null);
-}
-
-public void comprarProduto(Produtos produto, CupomPromocional cupom) {
-    if (produto == null) return;
-
-    double valor = produto.getValor();
-    if (cupom != null) {
-        valor = cupom.aplicarDesconto(valor);
+    // Comprar VÁRIOS SEM cupom
+    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade) throws VendasException {
+        comprarVariosBilhetes(sala, sessao, quantidade, null);
     }
 
-    produtos.add(produto);
-    valoresProdutos.add(valor);
-    System.out.println(produto.getNome() + " adicionado à compra!");
-}
+    // Comprar VÁRIOS COM cupom
+    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade, CupomPromocional cupom) throws VendasException {
+        java.util.List<String> cadeirasSugeridas = sessao.sugerirCadeiras(quantidade);
+
+        if (cadeirasSugeridas == null) {
+            throw new VendasException("Não há " + quantidade + " cadeiras juntas disponíveis nesta sessão.");
+        }
+
+        System.out.println("Sugestão de cadeiras juntas encontradas: " + cadeirasSugeridas);
+        System.out.println("Efetuando a compra...");
+
+        for (String cadeira : cadeirasSugeridas) {
+            comprarBilhete(sala, sessao, cadeira, cupom);
+        }
+        
+        System.out.println(quantidade + " bilhetes comprados com sucesso!");
+    }
+
+
+    // --- COMPRA DE PRODUTOS DA BOMBONIERE ---
+    
+    // Comprar produto SEM cupom
+    public void comprarProduto(Produtos produto) {
+        comprarProduto(produto, null);
+    }   
+    
+    // Comprar produto COM cupom
+    public void comprarProduto(Produtos produto, CupomPromocional cupom) {
+        if (produto == null) return;    
+        double valor = produto.getValor();
+        if (cupom != null) {
+            valor = cupom.aplicarDesconto(valor);
+        }   
+        produtos.add(produto);
+        valoresProdutos.add(valor); // Adiciona o valor final (com ou sem desconto) na lista
+        System.out.println(produto.getNome() + " adicionado à compra!");
+    }
+
+    // --- CÁLCULOS E RESUMO ---
 
     public double calcularValorTotal() {
         double total = 0.0;
@@ -112,30 +149,6 @@ public void comprarProduto(Produtos produto, CupomPromocional cupom) {
         }
 
         return total;
-    }
-
-    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade) {
-        comprarVariosBilhetes(sala, sessao, quantidade, null);
-    }
-
-    public void comprarVariosBilhetes(Sala sala, Sessao sessao, int quantidade, CupomPromocional cupom) {
-        // Busca a sugestão de cadeiras juntas na sessão
-        java.util.List<String> cadeirasSugeridas = sessao.sugerirCadeiras(quantidade);
-
-        if (cadeirasSugeridas == null) {
-            System.out.println("Não há " + quantidade + " cadeiras juntas disponíveis nesta sessão.");
-            return;
-        }
-
-        System.out.println("Sugestão de cadeiras juntas encontradas: " + cadeirasSugeridas);
-        System.out.println("Efetuando a compra...");
-
-        // Reutiliza o método individual para comprar cada cadeira da sugestão
-        for (String cadeira : cadeirasSugeridas) {
-            comprarBilhete(sala, sessao, cadeira, cupom);
-        }
-        
-        System.out.println(quantidade + " bilhetes comprados com sucesso!");
     }
 
     public void exibirResumoCompra() {

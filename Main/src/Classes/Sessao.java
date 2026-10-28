@@ -3,13 +3,23 @@ package Classes;
 public class Sessao {
     private Filme filme;
     private boolean[][] cadeiras;
+    public boolean horarioPassado = false;
 
+    public Filme getFilme(){
+        return filme;
+    }
     public void setFilme(Filme filme) {
         this.filme = filme;
     }
 
     public void setCadeiras(boolean[][] cadeiras) {
         this.cadeiras = cadeiras;
+    }
+    public boolean isHorarioPassado(){
+        return horarioPassado;
+    }
+    public void setHorarioPassado(boolean horarioPassado){
+        this.horarioPassado = horarioPassado;
     }
 
     public void cancelarReserva(String cadeira) {
@@ -73,39 +83,25 @@ public class Sessao {
         }
     }
 
-    public boolean reservarCadeira(String cadeira) {
+    public void reservarCadeira(String cadeira) throws VendasException {
         int[] coordenadas = converterCadeira(cadeira);
 
-
         if (coordenadas == null) {
-            System.out.println("Código de assento inválido!");
-            return false;
+            throw new VendasException("Código de assento inválido!");
         }
 
         int linha = coordenadas[0];
         int coluna = coordenadas[1];
 
-
         if (linha < 0 || linha >= cadeiras.length || coluna < 0 || coluna >= cadeiras[0].length) {
-            System.out.println("Assento fora dos limites da sala!");
-            return false;
+            throw new VendasException("Assento fora dos limites da sala!");
         }
 
         if (cadeiras[linha][coluna]) {
-            System.out.println("O assento " + cadeira + " já está ocupado!");
-            return false;
+            throw new VendasException("ERRO: A poltrona " + cadeira + " já foi selecionada e está ocupada!");
         }
 
-        cadeiras[linha][coluna] = true;
-        return true;
-    }
-
-    public boolean[][] getCadeiras() {
-        return cadeiras;
-    }
-
-    public Filme getFilme() {
-        return filme;
+        cadeiras[linha][coluna] = true; // Reserva a cadeira com sucesso
     }
 
 }
