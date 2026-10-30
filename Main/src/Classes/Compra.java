@@ -1,6 +1,7 @@
 package Classes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import Enums.CupomPromocional;
 import Enums.Produtos;
@@ -66,15 +67,8 @@ public class Compra {
     public Bilhete comprarBilhete(Sala sala, Sessao sessao, String cadeira, CupomPromocional cupom) throws VendasException {
         Filme filme = sessao.getFilme();
 
-        // 1. Verifica se o filme está em cartaz
-        if (!filme.isEmCartaz()) {
-            throw new VendasException("ERRO: O filme '" + filme.getNome() + "' não está mais em cartaz!");
-        }
-
-        // 2. Verifica se o horário da sessão já passou
-        if (sessao.isHorarioPassado()) {
-            throw new VendasException("ERRO: O horário desta sessão já passou!");
-        }
+        // 1 e 2. Filme em cartaz e horário ainda não passou
+        validarSessao(sessao);
 
         // 3. Tenta reservar a cadeira (vai disparar VendasException se estiver ocupada)
         sessao.reservarCadeira(cadeira);
@@ -86,10 +80,52 @@ public class Compra {
         }
 
         String horario = sala.getHorarioSessao(sessao);
-        Bilhete bilhete = new Bilhete(usuario, usuario.getCpf(), sala, sessao, filme, (float) valor, cadeira, horario);
+        Bilhete bilhete = new Bilhete(usuario, usuario.getCpf(), sala, sessao, filme, valor, cadeira, horario);
         bilhetes.add(bilhete);
 
         return bilhete;
+    }
+
+    // Regras da venda: o filme precisa estar em cartaz e a sessão não pode ter passado
+    public void validarSessao(Sessao sessao) throws VendasException {
+        Filme filme = sessao.getFilme();
+        if (!filme.isEmCartaz()) {
+            throw new VendasException("ERRO: O filme '" + filme.getNome() + "' não está mais em cartaz!");
+        }
+        if (sessao.isHorarioPassado()) {
+            throw new VendasException("ERRO: O horário desta sessão já passou!");
+        }
+    }
+
+    // Comprar VÁRIOS escolhendo as cadeiras (ex.: as que o sistema sugeriu). Tudo ou nada.
+    public java.util.List<Bilhete> comprarBilhetes(Sala sala, Sessao sessao, java.util.List<String> cadeiras) throws VendasException {
+        return comprarBilhetes(sala, sessao, cadeiras, null);
+    }
+
+    public java.util.List<Bilhete> comprarBilhetes(Sala sala, Sessao sessao, java.util.List<String> cadeiras, CupomPromocional cupom) throws VendasException {
+        java.util.List<Bilhete> comprados = new ArrayList<>();
+        if (cadeiras == null || cadeiras.isEmpty()) {
+            return comprados;
+        }
+        if (new HashSet<>(cadeiras).size() != cadeiras.size()) {
+            throw new VendasException("ERRO: Há cadeiras repetidas na lista!");
+        }
+
+        // valida TUDO antes de reservar qualquer cadeira
+        validarSessao(sessao);
+        for (String c : cadeiras) {
+            if (!sessao.isCadeiraValida(c)) {
+                throw new VendasException("ERRO: Código de assento inválido: " + c);
+            }
+            if (!sessao.isCadeiraLivre(c)) {
+                throw new VendasException("ERRO: A poltrona " + c + " já foi selecionada e está ocupada!");
+            }
+        }
+
+        for (String c : cadeiras) {
+            comprados.add(comprarBilhete(sala, sessao, c, cupom));
+        }
+        return comprados;
     }
 
     // Comprar VÁRIOS SEM cupom

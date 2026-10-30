@@ -11,7 +11,7 @@ public class Sala {
     public Sala(int numero, TipoSala tipo) {
         this.numero = numero;
         this.tipo = tipo;
-        this.sessoes = new Sessao[5];
+        this.sessoes = new Sessao[7];   // 08-10, 10-12, ..., 20-22
     }
 
     // Get e set
@@ -45,7 +45,7 @@ public class Sala {
         return false;
     }
 
-    private String obterHorario(int indice) {
+    public String obterHorario(int indice) {
         int inicio = 8 + (indice * 2);
         int fim = inicio + 2;
         return String.format("%02d:00 - %02d:00", inicio, fim);

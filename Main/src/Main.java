@@ -2,6 +2,7 @@ import Classes.*;
 import Enums.Produtos;
 import Enums.TipoSala;
 import Enums.CupomPromocional;
+import Persistencia.Repositorio;
 
 public class Main {
 
@@ -18,6 +19,12 @@ public class Main {
         sala1.agendarSessao(0, sessao1);
         sala1.agendarSessao(2, sessao2);
 
+        // Antes de escolher a poltrona, o cliente vê o mapa da sessão
+        System.out.println(">>> Sessões da sala e mapa de cadeiras da sessão 1");
+        sala1.exibirSessoesDisponiveis();
+        sessao1.exibirMapa();
+        System.out.println();
+
         // ==========================================
         // COMPRA 1: João
         // ==========================================
@@ -27,6 +34,7 @@ public class Main {
         try {
             compraJoao.comprarBilhete(sala1, sessao1, "A3");
             compraJoao.comprarProduto(Produtos.AGUA);
+            joao.realizarCompra(compraJoao);
             compraJoao.exibirResumoCompra();
         } catch (VendasException e) {
             System.out.println(e.getMessage());
@@ -76,5 +84,101 @@ public class Main {
         } catch (VendasException e) {
             System.out.println(e.getMessage()); // Vai imprimir o erro formatado!
         }
+
+        System.out.println(">>> Mapa depois das compras (X = ocupada)");
+        sessao1.exibirMapa();
+
+        // ==========================================
+        // ETAPA 1: vários bilhetes, alterar e cancelar compra
+        // ==========================================
+        System.out.println("\n--- VÁRIOS BILHETES (sistema sugere cadeiras juntas) ---");
+        Usuario maria = new Usuario("maria", "55566677788", "123", 35, "F", "maria@gmail.com", "maria cartao", "4000123412341234", 321);
+        Compra compraMaria = new Compra(maria);
+        try {
+            compraMaria.comprarVariosBilhetes(sala1, sessao1, 4, CupomPromocional.BEMVINDO10);
+            maria.realizarCompra(compraMaria);
+            compraMaria.exibirResumoCompra();
+
+            System.out.println("--- ALTERAR COMPRA (troca por uma de 2 bilhetes) ---");
+            Compra compraMaria2 = new Compra(maria);
+            java.util.List<String> sugestao = sessao1.sugerirCadeiras(2);
+            System.out.println("Sugestão para 2 pessoas: " + sugestao);
+            compraMaria2.comprarBilhetes(sala1, sessao1, sugestao);
+            maria.alterarCompra(compraMaria2);
+            compraMaria2.exibirResumoCompra();
+
+            System.out.println("--- CANCELAR COMPRA (libera as cadeiras) ---");
+            System.out.println(sugestao.get(0) + " livre antes do cancelamento? " + sessao1.isCadeiraLivre(sugestao.get(0)));
+            maria.cancelarCompra();
+            System.out.println(sugestao.get(0) + " livre depois do cancelamento? " + sessao1.isCadeiraLivre(sugestao.get(0)));
+        } catch (VendasException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // ==========================================
+        // ETAPA 3: os 3 erros de VendasException
+        // ==========================================
+        System.out.println("\n--- ERRO 2: HORÁRIO DA SESSÃO JÁ PASSOU ---");
+        sessao2.setHorarioPassado(true);
+        try {
+            new Compra(joao).comprarBilhete(sala1, sessao2, "F1");
+        } catch (VendasException e) {
+            System.out.println(e.getMessage());
+        }
+        sessao2.setHorarioPassado(false);
+
+        System.out.println("\n--- ERRO 3: FILME FORA DE CARTAZ ---");
+        filme2.setEmCartaz(false);
+        try {
+            new Compra(joao).comprarBilhete(sala1, sessao2, "F1");
+        } catch (VendasException e) {
+            System.out.println(e.getMessage());
+        }
+        filme2.setEmCartaz(true);
+
+        // ==========================================
+        // ETAPA 3: Administrador, Funcionário e persistência em arquivo
+        // ==========================================
+        System.out.println("\n--- PERSISTÊNCIA (Administrador / Funcionário) ---");
+        apagarPasta("dados_demo");
+        Repositorio repo = new Repositorio("dados_demo");
+        Administrador admin = new Administrador("Carlos", 40, "carlos@cinema.com", 5000, 1, repo);
+        Funcionario func = new Funcionario("Marina", 25, "marina@cinema.com", 2500, repo);
+
+        admin.incluirFilme(filme1);
+        admin.incluirFilme(filme2);
+        admin.adicionarUsuario(joao);
+        admin.adicionarUsuario(joao);        // repetido: o sistema recusa
+        admin.adicionarUsuario(fatima);
+        admin.adicionarUsuario(ana);
+        func.incluirFilme(new Filme("Duna", 155, "Areia; e especiaria", 25));   // fica em memória
+        admin.salvarDados();                 // o administrador grava tudo em arquivo
+
+        System.out.println("\n>>> Simulando reinício do sistema: novo repositório lendo os arquivos");
+        Repositorio repo2 = new Repositorio("dados_demo");
+        Administrador admin2 = new Administrador("Carlos", 40, "carlos@cinema.com", 5000, 1, repo2);
+        admin2.carregarDados();
+        for (Usuario u : repo2.getUsuarios()) {
+            System.out.println("  usuário: " + u.getUser() + " (" + u.getClass().getSimpleName() + ")");
+        }
+        for (Filme f : repo2.getFilmes()) {
+            System.out.println("  filme: " + f.getNome() + " | em cartaz: " + f.isEmCartaz() + " | nota: " + f.getNota());
+        }
+        System.out.println("  crítica de Interstelar: " + repo2.buscarFilme("Interstelar").getCritica()[0].getMensagem());
+
+        admin2.excluirUsuario(joao);
+        Filme duna = repo2.buscarFilme("Duna");
+        duna.setValor(30);
+        admin2.alterarFilme(duna);
+        admin2.excluirFilme(filme2);
+    }
+
+    private static void apagarPasta(String nome) {
+        java.io.File pasta = new java.io.File(nome);
+        java.io.File[] arquivos = pasta.listFiles();
+        if (arquivos != null) {
+            for (java.io.File a : arquivos) a.delete();
+        }
+        pasta.delete();
     }
 }

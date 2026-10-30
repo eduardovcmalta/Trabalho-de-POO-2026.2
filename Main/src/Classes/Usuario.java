@@ -111,6 +111,10 @@ public class Usuario{
             for (Bilhete b : this.compra.getBilhetes()) {
                 b.getSessao().cancelarReserva(b.getCadeira());
             }
+            // esvazia a Compra cancelada: ela não pode continuar listando bilhetes de cadeiras já liberadas
+            this.compra.getBilhetes().clear();
+            this.compra.getProdutos().clear();
+            this.compra.getValoresProdutos().clear();
             this.compra = null;
             System.out.println("Compra cancelada. As poltronas foram liberadas.");
         } else {
@@ -119,6 +123,10 @@ public class Usuario{
     }
 
     public void alterarCompra(Compra compraAtualizada) {
+        if (compraAtualizada == this.compra) {
+            System.out.println("Esta já é a compra atual. Informe uma NOVA compra para substituí-la.");
+            return;
+        }
         System.out.println("Alterando compra atual...");
         this.cancelarCompra(); // Cancela a anterior e libera os assentos
         this.realizarCompra(compraAtualizada); // Atribui a nova compra

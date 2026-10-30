@@ -12,6 +12,9 @@ public class Sessao {
         this.filme = filme;
     }
 
+    public boolean[][] getCadeiras() {
+        return cadeiras;
+    }
     public void setCadeiras(boolean[][] cadeiras) {
         this.cadeiras = cadeiras;
     }
@@ -81,6 +84,36 @@ public class Sessao {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    // true se o código existe na sala (ex.: "A3"), mesmo que esteja ocupada
+    public boolean isCadeiraValida(String cadeira) {
+        int[] c = converterCadeira(cadeira);
+        return c != null
+                && c[0] >= 0 && c[0] < cadeiras.length
+                && c[1] >= 0 && c[1] < cadeiras[0].length;
+    }
+
+    // true se o código existe e a cadeira está livre
+    public boolean isCadeiraLivre(String cadeira) {
+        if (!isCadeiraValida(cadeira)) return false;
+        int[] c = converterCadeira(cadeira);
+        return !cadeiras[c[0]][c[1]];
+    }
+
+    // Desenha o mapa da sala: "." = livre, "X" = ocupada (fileira A fica perto da tela)
+    public void exibirMapa() {
+        System.out.print("    ");
+        for (int c = 1; c <= cadeiras[0].length; c++) System.out.printf("%-3d", c);
+        System.out.println();
+        for (int l = cadeiras.length - 1; l >= 0; l--) {
+            System.out.print((char) ('A' + l) + "   ");
+            for (int c = 0; c < cadeiras[0].length; c++) {
+                System.out.print(cadeiras[l][c] ? "X  " : ".  ");
+            }
+            System.out.println();
+        }
+        System.out.println("                      TELA");
     }
 
     public void reservarCadeira(String cadeira) throws VendasException {
